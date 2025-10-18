@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { RegisterRequestDto } from '../entity/RegisterRequestDto';
 import { LoginRequestDto } from '../entity/LoginRequestDto';
 import { LoginResponseDto } from '../entity/LoginResponseDto';
+import { user } from './user';
 
 @Injectable({
   providedIn: 'root'
@@ -38,8 +39,12 @@ export class auth {
       // Save role and email in localStorage
       const role = data.roles ? data.roles[0].authority : res.role;
       const email = data.sub ? data.sub : '';
+      const userId = res.userId;
+      
+      console.log(userId)
       localStorage.setItem('role', role);
       localStorage.setItem('email', email);
+      localStorage.setItem('userId',userId);
     }
   }
 

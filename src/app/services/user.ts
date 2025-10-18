@@ -39,4 +39,8 @@ export class user {
   getUserAddress(userId: string): Observable<AddressResponseDto> {
     return this.http.get<AddressResponseDto>(`${this.baseUrl}/profile/address/${userId}`);
   }
+
+  getCustomerIdByUserId(userId: string): Observable<string> {
+    return this.http.get<string>(`${this.baseUrl}/getCusomerID/${userId}`);
+  }
 }

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AppliedLoanApplications } from '../../../entity/AppliedLoanApplications';
-
+import { HttpParams } from '@angular/common/http';
 @Component({
   selector: 'app-appliedloans',
   standalone: false,
@@ -18,11 +18,18 @@ export class Appliedloans implements OnInit {
     this.fetchAppliedLoans();
   }
 
-  fetchAppliedLoans() {
-    this.http.get<AppliedLoanApplications[]>(`http://localhost:8080/loan-app/applications/${this.userId}`)
-      .subscribe({
-        next: (res) => this.appliedLoans = res,
-        error: (err) => console.error('Error fetching applied loans:', err)
-      });
-  }
+  
+
+fetchAppliedLoans(page: number = 0, size: number = 1): void {
+  const params = new HttpParams()
+    .set('page', page.toString())
+    .set('size', size.toString());
+
+  this.http.get<AppliedLoanApplications[]>(`http://localhost:8080/loan-app/customer/${this.userId}/loans/application`, { params })
+    .subscribe({
+      next: (res) => this.appliedLoans = res,
+      error: (err) => console.error('Error fetching applied loans:', err)
+    });
+}
+
 }

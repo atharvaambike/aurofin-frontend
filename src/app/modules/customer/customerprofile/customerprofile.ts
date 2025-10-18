@@ -20,6 +20,8 @@ export class Customerprofile implements OnInit {
   }
 
   loadUserProfile() {
+    
+    alert(this.userId)
     this.userService.getUserProfile(this.userId).subscribe({
       next: (data) => this.userProfile = data,
       error: (err) => console.error('Error loading user profile:', err)
