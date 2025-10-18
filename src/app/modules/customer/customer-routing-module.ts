@@ -7,6 +7,7 @@ import { Customerprofile } from './customerprofile/customerprofile';
 import { Payment } from './payment/payment';
 import { ViewPayments } from './view-payments/view-payments';
 import { Viewloanschemes } from './viewloanschemes/viewloanschemes';
+import { Listofloans } from './listofloans/listofloans';
 
 const routes: Routes = [
   {
@@ -17,7 +18,8 @@ const routes: Routes = [
       { path: 'customer-profile', component: Customerprofile },
       { path: 'payment', component: Payment },
       { path: 'view-payments', component: ViewPayments },
-      { path: 'view-loan-schemes', component: Viewloanschemes }
+      { path: 'view-loan-schemes', component: Viewloanschemes },
+      { path: 'list-of-loans', component: Listofloans }
     ]
   }
 ];

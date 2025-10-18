@@ -1,13 +1,37 @@
-<nav>
-  <a routerLink="./applied-loans">applied loans</a> |
-  <a routerLink="./apply-for-loan">apply for loans</a>  | 
-  <a routerLink="./customer-profile">customer-profile</a> | 
-  <a routerLink="./payment">payments</a> | 
-  <a routerLink="./view-payments">view-payments</a> | 
-  <a routerLink="./view-loan-schemes">view loan schemes</a> 
+<div class="container-fluid">
+  <div class="row">
 
-</nav>
+    <!-- Sidebar -->
+    <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar p-3 vh-100">
+      <h4 class="text-center mb-4">Customer Dashboard</h4>
 
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="./applied-loans" routerLinkActive="active">Applied Loans</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="./apply-for-loan" routerLinkActive="active">Apply for Loans</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="./customer-profile" routerLinkActive="active">Customer Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="./payment" routerLinkActive="active">Payments</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="./view-payments" routerLinkActive="active">View Payments</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="./view-loan-schemes" routerLinkActive="active">View Loan Schemes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="./list-of-loans" routerLinkActive="active">List of Loans</a>
+        </li>
+      </ul>
+    </nav>
 
-
-<router-outlet></router-outlet>
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

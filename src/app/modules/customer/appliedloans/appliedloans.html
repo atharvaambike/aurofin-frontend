@@ -1,1 +1,35 @@
-<p>appliedloans works!</p>
+<div class="container mt-4">
+  <h2>Applied Loans</h2>
+  <table class="table table-bordered table-striped mt-3" *ngIf="appliedLoans.length; else noLoans">
+    <thead>
+      <tr>
+        <th>Application ID</th>
+        <th>Status</th>
+        <th>Requested Amount</th>
+        <th>Tenure</th>
+        <th>Total Loan Amount</th>
+        <th>Loan Type</th>
+        <th>Documents</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let loan of appliedLoans">
+        <td>{{loan.applicationId}}</td>
+        <td>{{loan.status}}</td>
+        <td>{{loan.requestedAmount}}</td>
+        <td>{{loan.requestedTenure}} months</td>
+        <td>{{loan.totalLoanAmount}}</td>
+        <td>{{loan.loanResponse.loanType}}</td>
+        <td>
+          <ul>
+            <li *ngFor="let doc of loan.documentResponseDto">{{doc.applicationId}}</li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #noLoans>
+    <p>No applied loans found.</p>
+  </ng-template>
+</div>

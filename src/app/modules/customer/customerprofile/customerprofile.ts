@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserDetailsResponseDto } from '../../../entity/UserDetailsResponseDto';
 import { user } from '../../../services/user';
 
@@ -9,19 +9,20 @@ import { user } from '../../../services/user';
   templateUrl: './customerprofile.html',
   styleUrl: './customerprofile.css'
 })
-export class Customerprofile {
+export class Customerprofile implements OnInit {
+  userProfile?: UserDetailsResponseDto;
+  userId = localStorage.getItem('userId') || '';
 
-
-  user?: UserDetailsResponseDto;
-
-  constructor(private userService: user) { }
+  constructor(private userService: user) {}
 
   ngOnInit(): void {
-    const userId = '39537e23-4563-49fa-a9a1-d3525ca1178f';
-    this.userService.getUserProfile(userId).subscribe({
-      next: (data) => this.user = data,
-      error: (err) => console.error('Error fetching user', err)
-    });
+    this.loadUserProfile();
   }
 
+  loadUserProfile() {
+    this.userService.getUserProfile(this.userId).subscribe({
+      next: (data) => this.userProfile = data,
+      error: (err) => console.error('Error loading user profile:', err)
+    });
+  }
 }
