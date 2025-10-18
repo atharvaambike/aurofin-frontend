@@ -10,7 +10,7 @@ import { HttpParams } from '@angular/common/http';
 })
 export class Appliedloans implements OnInit {
   appliedLoans: AppliedLoanApplications[] = [];
-  userId = localStorage.getItem('userId') || ''; 
+  customerId = localStorage.getItem('customerId') || ''; 
 
   constructor(private http: HttpClient) {}
 
@@ -25,7 +25,7 @@ fetchAppliedLoans(page: number = 0, size: number = 1): void {
     .set('page', page.toString())
     .set('size', size.toString());
 
-  this.http.get<AppliedLoanApplications[]>(`http://localhost:8080/loan-app/customer/${this.userId}/loans/application`, { params })
+  this.http.get<AppliedLoanApplications[]>(`http://localhost:8080/loan-app/customer/${this.customerId}/loans/application`, { params })
     .subscribe({
       next: (res) => this.appliedLoans = res,
       error: (err) => console.error('Error fetching applied loans:', err)
