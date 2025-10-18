@@ -4,13 +4,11 @@ import { Login } from './login/login';
 import { Register } from './register/register';
 
 const routes: Routes = [
-  {
-    path: '', component: Login,
-    children: [
-      { path: 'register', component: Register }
-    ]
-  }
+  { path: 'login', component: Login },
+  { path: 'register', component: Register },
+  { path: '', redirectTo: 'login', pathMatch: 'full' }
 ];
+
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
