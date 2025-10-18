@@ -1,0 +1,16 @@
+<div *ngIf="user; else loading">
+  <h2>{{ user.firstName }} {{ user.middleName }} {{ user.lastName }}</h2>
+  <p>Email: {{ user.email }}</p>
+  <p>Mobile: {{ user.mobile }}</p>
+  <p>Gender: {{ user.gender }}</p>
+  <p>Active: {{ user.isActive ? 'Yes' : 'No' }}</p>
+  <p>Joined: {{ user.createdAt | date }}</p>
+
+  <div *ngIf="user.profilePictureResponseDto">
+    <img [src]="user.profilePictureResponseDto.picURL" alt="Profile Picture" width="150" />
+  </div>
+</div>
+
+<ng-template #loading>
+  <p>Loading user profile...</p>
+</ng-template>
