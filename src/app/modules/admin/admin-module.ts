@@ -7,6 +7,7 @@ import { Loanscheme } from './loanscheme/loanscheme';
 import { Addmanager } from './addmanager/addmanager';
 import { Collateral } from './collateral/collateral';
 import { Loantype } from './loantype/loantype';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { Loantype } from './loantype/loantype';
   ],
   imports: [
     CommonModule,
-    AdminRoutingModule
+    AdminRoutingModule,
+    ReactiveFormsModule
   ]
 })
 export class AdminModule { }
