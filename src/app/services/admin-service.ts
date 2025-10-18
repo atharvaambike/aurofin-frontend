@@ -17,7 +17,7 @@ import { CollatoralTypeResponseDto } from '../entity/CollatoralTypeResponseDto';
 })
 export class AdminService {
 
-  private baseUrl = '/loan-app/admin';
+  private baseUrl = 'http://localhost:8080/loan-app/admin';
 
   constructor(private http: HttpClient) { }
 
@@ -79,4 +79,9 @@ export class AdminService {
   getAllCollaterals(): Observable<CollatoralTypeResponseDto[]> {
     return this.http.get<CollatoralTypeResponseDto[]>(`${this.baseUrl}/loans/collaterals`);
   }
+
+  updateLoanScheme(id: number, dto: LoanSchemeDto): Observable<LoanResponseDto> {
+  return this.http.put<LoanResponseDto>(`${this.baseUrl}/loans/${id}`, dto);
+}
+
 }
