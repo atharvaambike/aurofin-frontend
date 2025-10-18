@@ -5,6 +5,7 @@ import { Addmanager } from './addmanager/addmanager';
 import { Collateral } from './collateral/collateral';
 import { Loantype } from './loantype/loantype';
 import { Loanscheme } from './loanscheme/loanscheme';
+import { ListEmployees } from './list-employees/list-employees';
 
 const routes: Routes = [
   {
@@ -13,8 +14,8 @@ const routes: Routes = [
       { path: 'add-manager', component: Addmanager },
       { path: 'collaterals', component: Collateral },
       { path: 'loan-schemes', component: Loanscheme },
-      { path: 'loan-types', component: Loantype }
-
+      { path: 'loan-types', component: Loantype },
+      {path:'list-employees',component:ListEmployees}
     ]
   }
 ];

@@ -8,6 +8,7 @@ import { Addmanager } from './addmanager/addmanager';
 import { Collateral } from './collateral/collateral';
 import { Loantype } from './loantype/loantype';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ListEmployees } from './list-employees/list-employees';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     Loanscheme,
     Addmanager,
     Collateral,
-    Loantype
+    Loantype,
+    ListEmployees
   ],
   imports: [
     CommonModule,
