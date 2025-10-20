@@ -11,6 +11,7 @@ import { LoanTypeDto } from '../entity/LoanTypeDto';
 import { LoanTypeResponseDto } from '../entity/LoanTypeResponseDto';
 import { CollateralTypeDto } from '../entity/CollateralTypeDto';
 import { CollatoralTypeResponseDto } from '../entity/CollatoralTypeResponseDto';
+import { PageResponseDto } from '../entity/PageResponseDto';
 
 @Injectable({
   providedIn: 'root'
@@ -83,5 +84,13 @@ export class AdminService {
   updateLoanScheme(id: number, dto: LoanSchemeDto): Observable<LoanResponseDto> {
   return this.http.put<LoanResponseDto>(`${this.baseUrl}/loans/${id}`, dto);
 }
+
+getAllEmployees(page: number, size: number): Observable<PageResponseDto<EmployeeResponseDto>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<PageResponseDto<EmployeeResponseDto>>(`${this.baseUrl}/managers`, { params });
+  }
 
 }

@@ -12,13 +12,15 @@ import { Siderbar } from './layout/siderbar/siderbar';
 import { AuthInterceptor } from '../app/modules/token/auth/auth-interceptor';
 import { AuthGuard } from '../app/modules/token/auth/auth-guard';
 import { RoleGuard } from '../app/modules/token/auth/role-guard';
+import { ListEmployees } from './modules/list-employees/list-employees';
 
 @NgModule({
   declarations: [
     App,
     Header,
     Footer,
-    Siderbar
+    Siderbar,
+    ListEmployees
   ],
   imports: [
     BrowserModule,
