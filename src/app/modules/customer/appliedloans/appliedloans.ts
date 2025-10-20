@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { AppliedLoanApplications } from '../../../entity/AppliedLoanApplications';
-import { HttpParams } from '@angular/common/http';
+import { customer } from '../../../services/customer';
+import { ApplicationResponse } from '../../../entity/ApplicationResponse';
+import { PageResponseDto } from '../../../entity/PageResponseDto';
+
 @Component({
   selector: 'app-appliedloans',
   standalone: false,
@@ -9,27 +10,70 @@ import { HttpParams } from '@angular/common/http';
   styleUrl: './appliedloans.css'
 })
 export class Appliedloans implements OnInit {
-  appliedLoans: AppliedLoanApplications[] = [];
-  customerId = localStorage.getItem('customerId') || ''; 
 
-  constructor(private http: HttpClient) {}
+  appliedLoans: ApplicationResponse[] = [];
+  customerId = localStorage.getItem('customerId') || '';
+  
+  // Pagination properties
+  currentPage: number = 0;
+  pageSize: number = 10;
+  totalElements: number = 0;
+  totalPages: number = 0;
+  isFirst: boolean = true;
+  isLast: boolean = false;
+
+  // Optional: Filter by status
+  selectedStatus?: string;
+
+  constructor(private customer: customer) { }
 
   ngOnInit(): void {
     this.fetchAppliedLoans();
   }
 
-  
+  fetchAppliedLoans(page: number = 0, size: number = 10, status?: string): void {
+    this.customer.getAppliedLoans(this.customerId, page, size, status)
+      .subscribe({
+        next: (response: PageResponseDto<ApplicationResponse>) => {
+          this.appliedLoans = response.contents;
+          this.currentPage = page;
+          this.pageSize = response.size;
+          this.totalElements = response.totalElements;
+          this.totalPages = response.totalPage;
+          this.isFirst = response.isFirst;
+          this.isLast = response.isLast;
+        },
+        error: (err) => {
+          console.error('Error fetching applied loans:', err);
+        }
+      });
+  }
 
-fetchAppliedLoans(page: number = 0, size: number = 1): void {
-  const params = new HttpParams()
-    .set('page', page.toString())
-    .set('size', size.toString());
+  // Pagination methods
+  goToNextPage(): void {
+    if (!this.isLast) {
+      this.fetchAppliedLoans(this.currentPage + 1, this.pageSize, this.selectedStatus);
+    }
+  }
 
-  this.http.get<AppliedLoanApplications[]>(`http://localhost:8080/loan-app/customer/${this.customerId}/loans/application`, { params })
-    .subscribe({
-      next: (res) => this.appliedLoans = res,
-      error: (err) => console.error('Error fetching applied loans:', err)
-    });
-}
+  goToPreviousPage(): void {
+    if (!this.isFirst) {
+      this.fetchAppliedLoans(this.currentPage - 1, this.pageSize, this.selectedStatus);
+    }
+  }
 
+  goToPage(page: number): void {
+    this.fetchAppliedLoans(page, this.pageSize, this.selectedStatus);
+  }
+
+  // Filter by status
+  filterByStatus(status: string): void {
+    this.selectedStatus = status;
+    this.fetchAppliedLoans(0, this.pageSize, status);
+  }
+
+  clearFilter(): void {
+    this.selectedStatus = undefined;
+    this.fetchAppliedLoans(0, this.pageSize);
+  }
 }
