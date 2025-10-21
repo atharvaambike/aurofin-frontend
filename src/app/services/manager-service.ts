@@ -14,7 +14,7 @@ import { AppliedLoanApplications } from '../entity/AppliedLoanApplications';
 })
 export class ManagerService {
 
-  private baseUrl = '/loan-app/manager';
+  private baseUrl = 'http://localhost:8080/loan-app/manager';
 
   constructor(private http: HttpClient) { }
 
