@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { user } from '../../../services/user';
 
+
 @Component({
   selector: 'app-managerdashboard',
   standalone: false,
@@ -12,7 +13,9 @@ userId = localStorage.getItem('userId') || '';
 constructor(private userService:user){
 
 }
-  ngOnint(){
+  ngOnInit(){
+    console.log("user id")
+    console.log(this.userId);
   this.userService.getManagerID(this.userId).subscribe({
       next: (managerId) => {
         console.log('Customer ID:', managerId);

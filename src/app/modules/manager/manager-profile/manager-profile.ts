@@ -4,6 +4,7 @@ import { AddressResponseDto } from '../../../entity/AddressResponseDto';
 import { UpdateEmployeeDetailsDto } from '../../../entity/UpdateEmployeeDetailsDto';
 import { AddressDto } from '../../../entity/AddressDto';
 import { ManagerService } from '../../../services/manager-service';
+import { user } from '../../../services/user';
 
 @Component({
   selector: 'app-manager-profile',
@@ -13,6 +14,7 @@ import { ManagerService } from '../../../services/manager-service';
 })
 export class ManagerProfile implements OnInit {
   employeeId: string | null = null;
+  userId = localStorage.getItem('userId') || '';
 
   // Profile data - These should be single objects, NOT arrays
   profileDetails: UpdatedEmployeeResponseDto = {
@@ -56,13 +58,32 @@ export class ManagerProfile implements OnInit {
   errorMessage = '';
   successMessage = '';
 
-  constructor(private managerService: ManagerService) { }
+  constructor(private managerService: ManagerService,private userSerive:user) { }
 
   ngOnInit(): void {
-    this.employeeId = localStorage.getItem('managerId') || '';;
+    this.employeeId = localStorage.getItem('managerId') || '';
+    console.log(this.employeeId);
     if (!this.employeeId) {
       this.errorMessage = 'Employee ID not found. Please login again.';
+      return;
     }
+    this.userSerive.getUserAddress(this.userId).subscribe({
+      next: (response) => {
+        console.log('Customer ID:', response);
+        this.addressDetails = response;
+      },
+      error: (err) => {
+        console.error('Error fetching address:', err);
+      }
+    })
+    this.userSerive.getUserProfile(this.userId).subscribe({
+      next: (response)=>{
+        this.profileDetails = response;
+      },
+      error:(err)=>{
+        console.log('Error fetching profile',err);
+      }
+    })
   }
 
   // Toggle edit mode for details

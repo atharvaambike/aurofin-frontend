@@ -45,7 +45,7 @@ export class ManagerService {
 
   updateEmployeeDetails(employeeId: string, details: UpdateEmployeeDetailsDto): Observable<UpdatedEmployeeResponseDto> {
     return this.http.post<UpdatedEmployeeResponseDto>(
-      `${this.baseUrl}/manager/${employeeId}/details`,
+      `${this.baseUrl}/${employeeId}/details`,
       details,
       { headers: this.getAuthHeaders() }
     );
@@ -53,7 +53,7 @@ export class ManagerService {
 
   updateAddress(employeeId: string, address: AddressDto): Observable<AddressResponseDto> {
     return this.http.post<AddressResponseDto>(
-      `${this.baseUrl}/manager/${employeeId}/address`,
+      `${this.baseUrl}/${employeeId}/address`,
       address,
       { headers: this.getAuthHeaders() }
     );
@@ -111,4 +111,6 @@ export class ManagerService {
       { headers: this.getAuthHeaders() }
     );
   }
+
+  
 }
