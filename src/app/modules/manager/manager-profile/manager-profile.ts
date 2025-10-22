@@ -59,7 +59,7 @@ export class ManagerProfile implements OnInit {
   constructor(private managerService: ManagerService) { }
 
   ngOnInit(): void {
-    this.employeeId = this.managerService.getEmployeeId();
+    this.employeeId = localStorage.getItem('managerId') || '';;
     if (!this.employeeId) {
       this.errorMessage = 'Employee ID not found. Please login again.';
     }

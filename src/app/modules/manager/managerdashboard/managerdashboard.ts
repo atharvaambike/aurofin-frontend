@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { user } from '../../../services/user';
 
 @Component({
   selector: 'app-managerdashboard',
@@ -7,5 +8,19 @@ import { Component } from '@angular/core';
   styleUrl: './managerdashboard.css'
 })
 export class Managerdashboard {
+userId = localStorage.getItem('userId') || '';
+constructor(private userService:user){
 
+}
+  ngOnint(){
+  this.userService.getManagerID(this.userId).subscribe({
+      next: (managerId) => {
+        console.log('Customer ID:', managerId);
+        localStorage.setItem('managerId', managerId);
+      },
+      error: (err) => {
+        console.error('Error fetching customer ID:', err);
+      }
+    });
+}
 }
