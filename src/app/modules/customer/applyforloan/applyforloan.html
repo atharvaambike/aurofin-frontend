@@ -90,18 +90,19 @@
 
               <!-- Loan Scheme ID (Readonly if scheme selected, editable otherwise) -->
               <div class="col-md-6 mb-3">
-                <label class="form-label">Loan Scheme ID <span class="text-danger">*</span></label>
-                <input 
+                <!-- <label class="form-label">Loan Scheme ID <span class="text-danger">*</span></label> -->
+                <!-- <input 
+                  [(ngModel)]="loanSchemeId"
                   formControlName="loanSchemeId" 
                   type="number" 
                   class="form-control"
                   [class.is-invalid]="applyLoanForm.get('loanSchemeId')?.invalid && applyLoanForm.get('loanSchemeId')?.touched"
                   [readonly]="selectedScheme !== null"
                   [class.bg-light]="selectedScheme !== null"
-                  placeholder="Enter loan scheme ID">
-                <small *ngIf="selectedScheme" class="text-success">
-                  <i class="bi bi-check-circle-fill"></i> Auto-filled from selected scheme
-                </small>
+                  placeholder="Enter loan scheme ID"> -->
+                <!-- <small *ngIf="selectedScheme" class="text-success"> -->
+                  <!-- <i class="bi bi-check-circle-fill"></i> Auto-filled from selected scheme -->
+                <!-- </small> -->
                 <div *ngIf="applyLoanForm.get('loanSchemeId')?.invalid && applyLoanForm.get('loanSchemeId')?.touched" 
                      class="invalid-feedback d-block">
                   Loan scheme ID is required

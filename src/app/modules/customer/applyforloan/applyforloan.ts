@@ -20,30 +20,34 @@ interface DocumentUpload {
 export class Applyforloan implements OnInit {
   applyLoanForm: FormGroup;
   userId = localStorage.getItem('userId') || '';
+  customerId = localStorage.getItem('customerId') || '';
   selectedScheme: LoanSchemeDto | null = null;
   
+
+
   // Document upload related
   requiredDocuments: string[] = [];
   documentUploads: DocumentUpload[] = [];
-  
+
   // Application state
   applicationCreated = false;
   applicationId: string = '';
   isSubmitting = false;
 
   constructor(
-    private fb: FormBuilder, 
+    private fb: FormBuilder,
     private http: HttpClient,
     private router: Router
   ) {
     this.applyLoanForm = this.fb.group({
       loanAmount: ['', [Validators.required, Validators.min(1)]],
       tenure: ['', [Validators.required, Validators.min(1)]],
-      loanSchemeId: ['', Validators.required],
+      loanSchemeId: [''],
       occupation: ['', Validators.required],
       monthlyIncome: ['', [Validators.required, Validators.min(0)]],
       applicantAge: ['', [Validators.required, Validators.min(18)]]
     });
+
 
     // IMPORTANT: Get selected scheme from navigation state in constructor
     const navigation = this.router.getCurrentNavigation();
@@ -51,7 +55,7 @@ export class Applyforloan implements OnInit {
       this.selectedScheme = navigation.extras.state['selectedScheme'];
       console.log('✓ Scheme received in constructor:', this.selectedScheme);
     }
-    
+
     // Also try to get from history state
     if (!this.selectedScheme && history.state.selectedScheme) {
       this.selectedScheme = history.state.selectedScheme;
@@ -75,14 +79,16 @@ export class Applyforloan implements OnInit {
     } else {
       console.log('⚠️ No scheme selected - user must enter loanSchemeId manually');
     }
+
   }
+
+  loanSchemeId !: number;
 
   populateFormWithScheme() {
     if (this.selectedScheme) {
       this.applyLoanForm.patchValue({
         loanSchemeId: this.selectedScheme.loanTypeId
       });
-      
       console.log('✓ Loan Scheme ID set to:', this.selectedScheme.loanTypeId);
 
       // Set validators based on scheme
@@ -111,7 +117,7 @@ export class Applyforloan implements OnInit {
 
       // IMPORTANT: Update form validity after setting validators
       this.applyLoanForm.updateValueAndValidity();
-      
+
       console.log('✓ Form validators updated');
       console.log('Form values after patch:', this.applyLoanForm.value);
       console.log('Form valid after patch:', this.applyLoanForm.valid);
@@ -120,10 +126,10 @@ export class Applyforloan implements OnInit {
 
   prepareRequiredDocuments() {
     this.requiredDocuments = [];
-    
-    if (this.selectedScheme?.collateralRequired && 
-        this.selectedScheme.collateralRequirements) {
-      
+
+    if (this.selectedScheme?.collateralRequired &&
+      this.selectedScheme.collateralRequirements) {
+
       // Collect all required documents from all collateral types
       this.selectedScheme.collateralRequirements.forEach(collateral => {
         if (collateral.requiredDocuments) {
@@ -169,7 +175,7 @@ export class Applyforloan implements OnInit {
   removeFile(index: number) {
     this.documentUploads[index].file = null;
     this.documentUploads[index].fileName = '';
-    
+
     // Reset file input
     const fileInput = document.getElementById(`file-${index}`) as HTMLInputElement;
     if (fileInput) {
@@ -198,20 +204,20 @@ export class Applyforloan implements OnInit {
 
     if (this.applyLoanForm.valid) {
       console.log('✓ Form is valid, proceeding with submission...');
-      
+
       this.isSubmitting = true;
       const application: ApplicationDto = this.applyLoanForm.value;
-      
+      application.loanSchemeId = this.selectedScheme?.loanTypeId ? Number(this.selectedScheme.loanTypeId) : -1;
       console.log('Application data to send:', application);
-      
-      const url = `http://localhost:8080/loan-app/customer/${this.userId}/loans/application`;
+
+      const url = `http://localhost:8080/loan-app/customer/${this.customerId}/loans/application`;
       console.log('Posting to URL:', url);
-      
+
       this.http.post<any>(url, application).subscribe({
         next: (response) => {
           console.log('✅ SUCCESS! Application created:', response);
           this.applicationCreated = true;
-          
+
           // Try to get applicationId from different possible response structures
           if (response.applicationId) {
             this.applicationId = response.applicationId;
@@ -223,12 +229,12 @@ export class Applyforloan implements OnInit {
             console.warn('⚠️ Could not find applicationId in response:', response);
             this.applicationId = 'unknown';
           }
-          
+
           console.log('Application ID:', this.applicationId);
-          
+
           alert('Loan application submitted successfully! Please upload required documents.');
           this.isSubmitting = false;
-          
+
           // If documents are ready, upload them
           if (this.allDocumentsUploaded()) {
             this.uploadDocuments();
@@ -238,9 +244,9 @@ export class Applyforloan implements OnInit {
           console.error('❌ ERROR applying for loan:', err);
           console.error('Error status:', err.status);
           console.error('Error body:', err.error);
-          
+
           let errorMessage = 'Unknown error occurred';
-          
+
           if (err.status === 0) {
             errorMessage = 'Cannot connect to server. Please check if backend is running.';
           } else if (err.status === 401) {
@@ -254,7 +260,7 @@ export class Applyforloan implements OnInit {
           } else if (err.message) {
             errorMessage = err.message;
           }
-          
+
           alert('Error submitting loan application: ' + errorMessage);
           this.isSubmitting = false;
         }
@@ -263,7 +269,7 @@ export class Applyforloan implements OnInit {
       console.log('❌ Form is INVALID');
       console.log('Form errors:', this.getFormValidationErrors());
       this.markFormGroupTouched(this.applyLoanForm);
-      
+
       // Show which fields are invalid
       const invalidFields = this.getInvalidFields();
       if (invalidFields.length > 0) {
@@ -293,7 +299,7 @@ export class Applyforloan implements OnInit {
 
     this.isSubmitting = true;
     const formData = new FormData();
-    
+
     // Append all files
     this.documentUploads.forEach(doc => {
       if (doc.file) {
@@ -316,7 +322,7 @@ export class Applyforloan implements OnInit {
         console.log('✅ Documents uploaded successfully:', response);
         alert('Documents uploaded successfully! Your application is now complete.');
         this.isSubmitting = false;
-        
+
         // Navigate to applied loans page
         this.router.navigate(['/customer/applied-loans']);
       },
@@ -324,9 +330,9 @@ export class Applyforloan implements OnInit {
         console.error('❌ Error uploading documents:', err);
         console.error('Error status:', err.status);
         console.error('Error body:', err.error);
-        
+
         let errorMessage = 'Unknown error occurred';
-        
+
         if (err.status === 0) {
           errorMessage = 'Cannot connect to server. Please check if backend is running.';
         } else if (err.error?.message) {
@@ -334,7 +340,7 @@ export class Applyforloan implements OnInit {
         } else if (err.message) {
           errorMessage = err.message;
         }
-        
+
         alert('Error uploading documents: ' + errorMessage);
         this.isSubmitting = false;
       }
