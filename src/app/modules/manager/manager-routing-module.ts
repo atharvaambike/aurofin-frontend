@@ -9,7 +9,7 @@ const routes: Routes = [
     path: '', component: Managerdashboard,
     children: [
       { path: 'requested-loans', component: Requestedloans },
-      { path: 'view-profile', component: ManagerProfile },
+      { path: 'manager-profile', component: ManagerProfile },
 
     ]
   }

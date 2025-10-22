@@ -1,10 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 import { ManagerRoutingModule } from './manager-routing-module';
 import { Requestedloans } from './requestedloans/requestedloans';
 import { Managerdashboard } from './managerdashboard/managerdashboard';
 import { ManagerProfile } from './manager-profile/manager-profile';
+
 
 
 @NgModule({
@@ -15,7 +18,8 @@ import { ManagerProfile } from './manager-profile/manager-profile';
   ],
   imports: [
     CommonModule,
-    ManagerRoutingModule
+    ManagerRoutingModule,
+    FormsModule
   ]
 })
 export class ManagerModule { }
