@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApplicationDto } from '../../../entity/ApplicationDto';
 import { LoanSchemeDto } from '../../../entity/LoanSchemeDto';
+import { LoanResponseDto } from '../../../entity/LoanResponseDto';
 
 interface DocumentUpload {
   file: File | null;
@@ -21,7 +22,7 @@ export class Applyforloan implements OnInit {
   applyLoanForm: FormGroup;
   userId = localStorage.getItem('userId') || '';
   customerId = localStorage.getItem('customerId') || '';
-  selectedScheme: LoanSchemeDto | null = null;
+  selectedScheme: LoanResponseDto | null = null;
   
 
 
@@ -87,9 +88,9 @@ export class Applyforloan implements OnInit {
   populateFormWithScheme() {
     if (this.selectedScheme) {
       this.applyLoanForm.patchValue({
-        loanSchemeId: this.selectedScheme.loanTypeId
+        loanSchemeId: this.selectedScheme.loanSchemeId
       });
-      console.log('✓ Loan Scheme ID set to:', this.selectedScheme.loanTypeId);
+      console.log('✓ Loan Scheme ID set to:', this.selectedScheme.loanSchemeId);
 
       // Set validators based on scheme
       this.applyLoanForm.get('loanAmount')?.setValidators([
@@ -160,11 +161,11 @@ export class Applyforloan implements OnInit {
     const file = event.target.files[0];
     if (file) {
       // Optional: Add file size validation
-      const maxSize = 5 * 1024 * 1024; // 5MB
-      if (file.size > maxSize) {
-        alert('File size must be less than 5MB');
-        return;
-      }
+      // const maxSize = 5 * 1024 * 1024; // 5MB
+      // if (file.size > maxSize) {
+      //   alert('File size must be less than 5MB');
+      //   return;
+      // }
 
       this.documentUploads[index].file = file;
       this.documentUploads[index].fileName = file.name;
@@ -207,7 +208,7 @@ export class Applyforloan implements OnInit {
 
       this.isSubmitting = true;
       const application: ApplicationDto = this.applyLoanForm.value;
-      application.loanSchemeId = this.selectedScheme?.loanTypeId ? Number(this.selectedScheme.loanTypeId) : -1;
+      // application.loanSchemeId = this.selectedScheme?.loanTypeId ? Number(this.selectedScheme.loanTypeId) : -1;
       console.log('Application data to send:', application);
 
       const url = `http://localhost:8080/loan-app/customer/${this.customerId}/loans/application`;
