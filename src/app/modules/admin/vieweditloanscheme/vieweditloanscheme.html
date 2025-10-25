@@ -1,0 +1,156 @@
+<div class="container py-5">
+  <div class="card shadow-lg border-0 rounded-4 form-card">
+    <div class="card-header bg-gradient text-white text-center rounded-top-4 py-3">
+      <h3 class="mb-0 fw-bold text-black">
+        <i class="bi bi-bank2 me-2"></i>Create Loan Scheme
+      </h3>
+      <p class="mb-0 small text-black">Define loan parameters, eligibility & charges</p>
+    </div>
+
+    <div class="card-body p-4 bg-light-glass">
+      <form [formGroup]="loanForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+
+        <!-- Loan Info -->
+        <div class="section-title mb-3">
+          <h5><i class="bi bi-info-circle me-2 text-primary"></i>Basic Details</h5>
+        </div>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Loan Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control fancy-input" formControlName="loanName" placeholder="e.g. Personal Loan Elite" />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Loan Type <span class="text-danger">*</span></label>
+            <select class="form-select fancy-input" formControlName="loanTypeId">
+              <option value="">Select type</option>
+              <option *ngFor="let type of loanTypes" [value]="type.id">{{ type.typeName }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Numeric Fields -->
+        <div class="section-title mt-4 mb-3">
+          <h5><i class="bi bi-cash-coin me-2 text-success"></i>Loan Limits & Interest</h5>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Min Loan Amount</label>
+            <input type="number" class="form-control fancy-input" formControlName="minLoanAmount" placeholder="₹10,000" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Max Loan Amount</label>
+            <input type="number" class="form-control fancy-input" formControlName="maxLoanAmount" placeholder="₹10,00,000" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Interest Rate (%)</label>
+            <input type="number" class="form-control fancy-input" formControlName="interestRate" placeholder="10.5" />
+          </div>
+        </div>
+
+        <!-- Tenure & Age -->
+        <div class="section-title mt-4 mb-3">
+          <h5><i class="bi bi-person-badge me-2 text-warning"></i>Eligibility</h5>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-3">
+            <label class="form-label fw-semibold">Max Tenure (months)</label>
+            <input type="number" class="form-control fancy-input" formControlName="maxTenure" placeholder="60" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label fw-semibold">Min Age</label>
+            <input type="number" class="form-control fancy-input" formControlName="minAge" placeholder="18" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label fw-semibold">Max Age</label>
+            <input type="number" class="form-control fancy-input" formControlName="maxAge" placeholder="70" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label fw-semibold">Min Income</label>
+            <input type="number" class="form-control fancy-input" formControlName="minIncome" placeholder="₹25,000" />
+          </div>
+        </div>
+
+        <!-- Collateral -->
+        <div class="section-title mt-4 mb-3">
+          <h5><i class="bi bi-shield-lock me-2 text-danger"></i>Collateral</h5>
+        </div>
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" formControlName="collateralRequired" id="collateralRequired" />
+          <label class="form-check-label" for="collateralRequired">Collateral Required?</label>
+        </div>
+
+        <div *ngIf="loanForm.get('collateralRequired')?.value" class="border rounded-3 p-3 bg-white shadow-sm">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="fw-semibold mb-0"><i class="bi bi-box-seam me-2 text-primary"></i>Collateral Requirements</h6>
+            <button type="button" class="btn btn-outline-primary btn-sm" (click)="addCollateralBox()">
+              <i class="bi bi-plus-circle"></i> Add Collateral
+            </button>
+          </div>
+
+          <div formArrayName="collateralRequirements">
+            <div *ngFor="let group of collateralRequirements.controls; let i = index" [formGroupName]="i" class="mb-3 p-3 border rounded-3 bg-light position-relative collateral-box">
+              <button type="button" class="btn-close position-absolute top-0 end-0 mt-2 me-2" aria-label="Close" (click)="removeCollateralBox(i)"></button>
+              <label class="form-label">Select Collateral</label>
+              <select formControlName="collatoralId" class="form-select fancy-input mb-2">
+                <option value="">Choose...</option>
+                <option *ngFor="let col of availableCollateralsForIndex(i)" [value]="col.collateralTypeId">
+                  {{ col.typeName }}
+                </option>
+              </select>
+
+              <label class="form-label">Required Documents</label>
+              <input type="text" class="form-control fancy-input" formControlName="requiredDocuments" placeholder="PAN, ID Proof..." />
+            </div>
+          </div>
+        </div>
+
+        <!-- Charges -->
+        <div class="section-title mt-4 mb-3">
+          <h5><i class="bi bi-gear-wide-connected me-2 text-secondary"></i>Charges & Conditions</h5>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Processing Fee (%)</label>
+            <input type="number" class="form-control fancy-input" formControlName="processingFeeFlat" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Early Closure Charge (%)</label>
+            <input type="number" class="form-control fancy-input" formControlName="earlyClosureCharge" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Default Penalty Rate (%)</label>
+            <input type="number" class="form-control fancy-input" formControlName="defaultPenaltyRate" />
+          </div>
+        </div>
+
+        <!-- installment duration -->
+<div class="col-md-4">
+  <label class="form-label fw-semibold">Installment Duration Type <span class="text-danger">*</span></label>
+  <select class="form-select fancy-input" formControlName="installmentDurationType">
+    <option value="">Select Duration Type</option>
+    <option value="MONTHLY">Monthly</option>
+    <option value="QUARTERLY">Quarterly</option>
+    <option value="YEARLY">Yearly</option>
+  </select>
+</div>
+        <!-- Conditions -->
+        <div class="mt-4">
+          <label class="form-label fw-semibold">Other Conditions</label>
+          <textarea class="form-control fancy-input" formControlName="otherConditions" rows="3" placeholder="Add any special terms..."></textarea>
+        </div>
+
+        <!-- Submit -->
+        <div class="text-center mt-5">
+          <button type="submit" class="btn btn-lg btn-primary px-5 shadow-lg submit-btn" >
+            <i class="bi bi-send-fill me-2"></i>Submit Scheme
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

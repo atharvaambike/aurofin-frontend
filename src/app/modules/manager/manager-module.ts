@@ -7,6 +7,7 @@ import { ManagerRoutingModule } from './manager-routing-module';
 import { Requestedloans } from './requestedloans/requestedloans';
 import { Managerdashboard } from './managerdashboard/managerdashboard';
 import { ManagerProfile } from './manager-profile/manager-profile';
+import { LoanApplication } from './loan-application/loan-application';
 
 
 
@@ -14,7 +15,8 @@ import { ManagerProfile } from './manager-profile/manager-profile';
   declarations: [
     Requestedloans,
     Managerdashboard,
-    ManagerProfile
+    ManagerProfile,
+    LoanApplication
   ],
   imports: [
     CommonModule,
