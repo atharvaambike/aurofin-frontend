@@ -12,7 +12,7 @@ export class Customerdashboard {
 constructor(private userService:user){
 
 }
-  ngOnint(){
+  ngOnInit(){
   this.userService.getCustomerIdByUserId(this.userId).subscribe({
       next: (customerId) => {
         console.log('Customer ID:', customerId);
